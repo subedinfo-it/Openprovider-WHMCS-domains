@@ -216,8 +216,8 @@ class RenewHookController extends BasePermissionController
                 // There was no scheduled transfer tracked. This is all good.
             }
         } elseif ($renewal_action == 'enable') {
-            $this->add_todo('The autorenewal for ' . $domain->domain . ' has been enabled. Reschedule the transfer with Openprovider.',
-                'Reschedule the transfer in case this domain was supposed to get transferred.');
+            /*$this->add_todo('The autorenewal for ' . $domain->domain . ' has been enabled. Reschedule the transfer with Openprovider.',
+                'Reschedule the transfer in case this domain was supposed to get transferred.');*/
         }
 
         return true;
