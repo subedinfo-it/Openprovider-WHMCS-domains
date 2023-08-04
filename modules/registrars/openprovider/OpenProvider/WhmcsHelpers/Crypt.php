@@ -18,16 +18,20 @@ class Crypt
 	 **/
 	public static function decrypt($encrypted_string)
 	{
-		$command 	= 'DecryptPassword';
-	    $postData 	= array(
-	        'password2' => $encrypted_string,
-	    );
+		if (function_exists('\decrypt')){
+			return \decrypt($encrypted_string);
+		} else{
+			$command 	= 'DecryptPassword';
+			$postData 	= array(
+				'password2' => $encrypted_string,
+			);
 
-	    $admin_user = General::get_admin_user();
+			$admin_user = General::get_admin_user();
 
-	    $results = localAPI($command, $postData, $admin_user);
+			$results = localAPI($command, $postData, $admin_user);
 
-	    return $results['password'];
+			return $results['password'];
+		}
 	}
 
 	/**
@@ -38,16 +42,20 @@ class Crypt
 	 **/
 	public static function encrypt($decrypted_string)
 	{
-		$command 	= 'EncryptPassword';
-	    $postData 	= array(
-	        'password2' => $decrypted_string,
-	    );
+		if (function_exists('\encrypt')){
+			return \encrypt($decrypted_string);
+		} else{
+			$command 	= 'EncryptPassword';
+			$postData 	= array(
+				'password2' => $decrypted_string,
+			);
 
-        $admin_user = General::get_admin_user();
+			$admin_user = General::get_admin_user();
 
-	    $results = localAPI($command, $postData, $admin_user);
-	    
-	    return $results['password'];
+			$results = localAPI($command, $postData, $admin_user);
+
+			return $results['password'];
+		}
 	}
 
 } // END class Crypt
