@@ -76,7 +76,13 @@ class Configuration
 
     public static function getServerUrl()
     {
-        $systemUrl = localAPI(WHMCSApiActionType::GetConfigurationValue, ['setting' => 'SystemURL'])['value'];
+        if (method_exists('\\WHMCS\\Config\\Setting', 'getValue')){
+            $systemUrl = rtrim(\WHMCS\Config\Setting::getValue('SystemURL'), '/') . "/";
+        }
+
+        if (!isset($systemUrl)){
+            $systemUrl = rtrim(\localAPI(WHMCSApiActionType::GetConfigurationValue, ['setting' => 'SystemURL'])['value']) . "/";
+        }
 
         $systemUrlWithoutProtocol = str_replace(['http://', 'https://'], '', $systemUrl);
         $phpHostUrl = $_SERVER['HTTP_HOST'];

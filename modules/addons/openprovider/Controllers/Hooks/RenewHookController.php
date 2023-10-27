@@ -62,11 +62,12 @@ class RenewHookController extends BasePermissionController
     {
         // Get the domain details
         $domain = $this->capsule->table('tbldomains')
-            ->find($params['params']['domainid']);
-
+        ->find($params['params']['domainid']);
         if ($this->checkIsNotOpenprovider($domain) == false) // It is an openprovider domain. Skip this one.
         {
-            return true;
+            return array (
+                'abortWithSuccess' => true,
+            );
         }
 
         // Check if the domain is scheduled for a transfer.
@@ -92,7 +93,7 @@ class RenewHookController extends BasePermissionController
             try {
                 $openprovider_domain = $this->openProvider->api->modifyScheduledTransferDate($openprovider_api_domain, date("Y-m-d H:i:s"));
             } catch (\Exception $ex) {
-                return false;
+                return array();
             }
 
             return array (
@@ -100,7 +101,7 @@ class RenewHookController extends BasePermissionController
             );
         }
 
-        return false;
+        return array();
     }
 
     /**
@@ -215,8 +216,8 @@ class RenewHookController extends BasePermissionController
                 // There was no scheduled transfer tracked. This is all good.
             }
         } elseif ($renewal_action == 'enable') {
-            $this->add_todo('The autorenewal for ' . $domain->domain . ' has been enabled. Reschedule the transfer with Openprovider.',
-                'Reschedule the transfer in case this domain was supposed to get transferred.');
+            /*$this->add_todo('The autorenewal for ' . $domain->domain . ' has been enabled. Reschedule the transfer with Openprovider.',
+                'Reschedule the transfer in case this domain was supposed to get transferred.');*/
         }
 
         return true;
